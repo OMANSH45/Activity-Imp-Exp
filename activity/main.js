@@ -10,7 +10,7 @@ let fileName=inputArr[0];
 let givenPath=inputArr[1];
 
 if(fileName=="help"){
-    console.log(helpObj.fxn(givenPath));
+    console.log(helpObj.fxn());
 
 }else if(fileName=="tree"){
     console.log(treeObj.fxn(givenPath));

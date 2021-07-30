@@ -9,32 +9,55 @@ let types = {
 }
 
 function tree(src){
-
-    let allEntities=fs.readdirSync(src);
-    for(let i=0;i<allEntities.length;i++){
-        let fileName=allEntities[i];
-        let fullPath=path.join(src,fileName);
-        let statusOfPath=fs.lstatSync(fullPath);
-        
-        if(statusOfPath.isFile()){
-            let ext = path.extname(fullPath);
-            if(types.media.includes(ext)){
-                console.log("media -> "+fileName);
-         }else if(types.archives.includes(ext)){
-            console.log("archives -> "+fileName);
-         }else if(types.documents.includes(ext)){
-            console.log("documents -> "+fileName);
-         }else if(types.app.includes(ext)){
-            console.log("app -> "+fileName);
-         }else{
-                console.log("others -> "+fileName);
-         }
-
+    if(src==undefined){
+        src=process.cwd();
         }
+    treeHelper(src,"");
+        return "tree command executed with path "+"\""+src+"\"";
     }
+function treeHelper(src,indent){
+    let isFile=fs.lstatSync(src).isFile();
+    if(isFile==true){
+        let fileName=path.basename(src);
+        console.log(indent+"|--"+fileName);
 
-    return "tree command executed with path "+"\""+src+"\"";
+    }else{
+        let dirName=path.basename(src);
+        console.log(indent+"|__"+dirName+"\t");
+        let allEntities=fs.readdirSync(src);
+        for(let i=0;i<allEntities.length;i++){
+            let newPath=path.join(src,allEntities[i]);
+            treeHelper(newPath,indent+"\t");
+        }
+
 }
+
+}   
+
+// function tree(src){
+//     if(src==undefined){
+//         src=process.cwd();
+//     }
+
+//     let allEntities=fs.readdirSync(src);
+//     let parentFolderName=path.basename(src);
+
+//     let completePath="|__"+parentFolderName;
+//     for(let i=0;i<allEntities.length;i++){
+//         let statusOfPath=fs.lstatSync(path.join(src,allEntities[i]));
+//         if(statusOfPath.isDirectory()){
+//             let newPath="C:\\Users\\omansh\\Desktop\\Activity imp_exp\\randomFolder";
+//             newPath=path.join(newPath,allEntities[i]);
+//             completePath=completePath+"\n\t"+"|--"+allEntities[i];
+//             tree(newPath);
+//         }else{
+//             completePath=completePath+"\n\t"+"|--"+allEntities[i];
+//         }
+//     }
+//     console.log(completePath);
+
+//     return "tree command executed with path "+"\""+src+"\"";
+// }
 
 module.exports={
     fxn:tree

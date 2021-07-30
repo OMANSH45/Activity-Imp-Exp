@@ -5,10 +5,13 @@ let types = {
     media: [".mp4", ".mkv"],
     archives: ['.zip', '.7z', '.rar', '.tar', '.gz', '.ar', '.iso', ".xz"],
     documents: ['.docx', '.doc', '.pdf', '.xlsx', '.xls', '.odt', '.ods', '.odp', '.odg', '.odf', '.txt', '.ps', '.tex'],
-    app: ['.exe', '.dmg', '.pkg', ".deb"]
+    apps: ['.exe', '.dmg', '.pkg', ".deb"]
 }
 
 function organize(src){
+    if(src==undefined){
+        src=process.cwd();
+    }
     let allEntities=fs.readdirSync(src);
     let src2=path.join(src,"OrganisedFiles");
     fs.mkdirSync(src2);
@@ -49,14 +52,14 @@ function organize(src){
                 let destFilePath=path.join(path.join(src2,"documents"),copiedFilePath);
                 fs.copyFileSync(fullPath,destFilePath);
 
-            }else if(types.app.includes(ext)){
-                if(fs.existsSync(path.join(src2,"app"))==false){
-                    let folderPath=path.join(src2,"app");
+            }else if(types.apps.includes(ext)){
+                if(fs.existsSync(path.join(src2,"apps"))==false){
+                    let folderPath=path.join(src2,"apps");
                 fs.mkdirSync(folderPath);
                 }
 
                 let copiedFilePath=path.basename(fullPath);
-                let destFilePath=path.join(path.join(src2,"app"),copiedFilePath);
+                let destFilePath=path.join(path.join(src2,"apps"),copiedFilePath);
                 fs.copyFileSync(fullPath,destFilePath);
 
             }else{
